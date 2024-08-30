@@ -14,7 +14,7 @@ void gpio_init(void) {
 }
 
 void gpio_set_pin(volatile uint8_t *port, uint8_t pin) {
-	*port |= (1 << pin)  // Set the specified pin high
+	*port |= (1 << pin);  // Set the specified pin high
 }
 
 void gpio_clear_pin(volatile uint8_t *port, uint8_t pin) {
