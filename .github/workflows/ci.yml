@@ -1,0 +1,46 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-avr avr-libc make clang-tidy lcov cppcheck
+    - name: Verify Cppcheck Installation
+      run: cppcheck --version
+
+    - name: List Files
+      run: ls -R
+
+    - name: Print Current Directory
+      run: pwd
+
+    - name: Display Makefile
+      run: cat Makefile
+
+    - name: Build Project
+      run: make all
+
+    - name: Run Unit Tests
+      run: make test
+
+    - name: Code Coverage
+      run: lcov --capture --directory . --output-file coverage.info
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage.info
+
+    - name: Run Cppcheck Static Analysis
+      run: |
+        cppcheck --enable=all --inconclusive --std=c99 --suppress=missingIncludeSystem --suppress=unusedFunction gpio.c test_gpio.c
