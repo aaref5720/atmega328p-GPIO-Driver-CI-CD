@@ -35,12 +35,12 @@ jobs:
     - name: Code Coverage
       run: lcov --capture --directory . --output-file coverage.info
 
+    - name: Run Cppcheck Static Analysis
+      run: |
+        cppcheck --enable=all --inconclusive --std=c99 --suppress=missingIncludeSystem --suppress=unusedFunction gpio.c test_gpio.c
+
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report
         path: coverage.info
-
-    - name: Run Cppcheck Static Analysis
-      run: |
-        cppcheck --enable=all --inconclusive --std=c99 --suppress=missingIncludeSystem --suppress=unusedFunction gpio.c test_gpio.c
