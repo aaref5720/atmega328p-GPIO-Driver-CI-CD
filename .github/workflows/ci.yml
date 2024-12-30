@@ -28,7 +28,11 @@ jobs:
 
     - name: Build Project
       run: make all
-
+      
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Run Unit Tests
       run: make test
 
