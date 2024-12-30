@@ -18,7 +18,7 @@ typedef volatile unsigned char PORT_t;
 #define PB0 0
 #endif
 
-void gpio_init(void);
+void gpio_init(void)
 void gpio_set_pin(volatile uint8_t *port, uint8_t pin);
 void gpio_clear_pin(volatile uint8_t *port, uint8_t pin);
 
