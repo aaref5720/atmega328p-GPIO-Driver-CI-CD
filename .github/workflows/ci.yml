@@ -10,6 +10,14 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    - name: Cache Apt Dependencies
+      uses: actions/cache@v3
+      with:
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-${{ hashFiles('Makefile') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
     - name: Install Dependencies
       run: |
         sudo apt-get update
@@ -32,9 +40,19 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
+
+    - name: Cache Apt Dependencies
+      uses: actions/cache@v3
+      with:
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-${{ hashFiles('Makefile') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
     - name: Install Dependencies
       run: |
         sudo apt-get update
@@ -45,5 +63,3 @@ jobs:
     - name: Run Cppcheck Static Analysis
       run: |
         cppcheck --enable=all --inconclusive --std=c99 --suppress=missingIncludeSystem --suppress=unusedFunction gpio.c test_gpio.c
-
-
